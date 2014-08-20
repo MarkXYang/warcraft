@@ -72,7 +72,7 @@ class Ninja : public Warrior
 public:
 	Ninja(int life_, Command &p) :Warrior(life_, p), weapon1(number % 3), weapon2((number + 1) % 3)
 	{
-		names = "Ninja";
+		names = "ninja";
 	}
 	void printCommand(int times);
 
@@ -90,19 +90,22 @@ public:
 };
 class Lion : public Warrior
 {
-	double loylaty;
+	int loylaty;
 public:
 	void getLoylaty();
 	Lion(int life_, Command &p) :Warrior(life_, p)
 	{
 		getLoylaty();
-		names = "Lion";
+		names = "lion";
 	}
 	void printCommand(int times)
 	{
 		getLoylaty();
 		Warrior::prints(times);
-		std::cout << "it's loylaty is " << loylaty << std::endl;
+		//std::cout.unsetf(std::ios_base::fixed);
+	/*	std::cout.unsetf(std::ios::scientific);*/
+		std::cout << "It's loyalty is " << loylaty << std::endl;
+
 	}
 
 };
@@ -166,10 +169,13 @@ void Ninja::printCommand(int times)
 }
 void Dragon::printCommand(int times)
 {
-	weapon.getWeaopn(pa->warriorNumber);
+	weapon.getWeaopn(pa->warriorNumber % 3);
 	getMorale();
 	Warrior::prints(times);
-	std::cout << "It has a " << weapon.getName() << ", and it's morale is " << std::setprecision(3) << morale << std::endl;
+	std::cout << "It has a " << weapon.getName() << ",and it's morale is ";
+	std::cout.setf(std::ios_base::fixed);
+	std::cout << std::setprecision(2) << (double)morale << std::endl;
+	std::cout.unsetf(std::ios_base::fixed);
 }
 void Iceman::printCommand(int times)
 {
@@ -183,7 +189,7 @@ void Lion::getLoylaty()
 }
 void Dragon::getMorale()
 {
-	morale = pa->life / (double)life;
+	morale = (double)pa->life / (double)life;	
 }
 Command::Command(std::string headName_, int life_, int lifeDragon, int lifeNinjia, int lifeIceman, int lifeLion, int lifeWolf) :
 headName(headName_), life(life_), dragon(lifeDragon, *this), ninja(lifeNinjia, *this),
@@ -216,28 +222,29 @@ int Command::bornjudge(int i, int time)
 	{
 		order = s2;
 	}
-	switch (order[i])
-	{
-	case 0:
-		switchWarrior = &numberWarrior[0];
-		break;
-	case 1:
-		switchWarrior = &numberWarrior[1];
-		break;
-	case 2:
-		switchWarrior = &numberWarrior[2];
-		break;
-	case 3:
-		switchWarrior = &numberWarrior[3];
-		break;
-	case 4:
-		switchWarrior = &numberWarrior[4];
-		break;
-	}
+	
 	while (searchTimes <= 5)
 	{
 		if ((*warri[order[i]]).life <= life)
 		{
+			switch (order[i])
+			{
+			case 0:
+				switchWarrior = &numberWarrior[0];
+				break;
+			case 1:
+				switchWarrior = &numberWarrior[1];
+				break;
+			case 2:
+				switchWarrior = &numberWarrior[2];
+				break;
+			case 3:
+				switchWarrior = &numberWarrior[3];
+				break;
+			case 4:
+				switchWarrior = &numberWarrior[4];
+				break;
+			}
 			life = life - (*warri[order[i]]).life;
 			warriorNumber++;
 			(*switchWarrior)++;
@@ -282,7 +289,7 @@ int main()
 	std::cin >> how;
 	for (int i = 0; i < how; i++)
 	{
-		std::cout << "case:" << i + 1 << std::endl;
+		std::cout << "Case:" << i + 1 << std::endl;
 		int life;
 		std::cin >> life;
 		int s[5] = {};
